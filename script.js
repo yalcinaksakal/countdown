@@ -14,14 +14,15 @@ const completeBtn = document.querySelector(".complete-button");
 const timeTable = [24 * 60 * 60 * 1000, 60 * 60 * 1000, 60 * 1000, 1000];
 let countdownTitle = "",
   countdownDate = "",
-  countdownValue = Date,
-  countdownActive;
+  countdownValue = new Date(),
+  countdownActive,
+  savedCountdown;
 
 //set date min with today
 const today = new Date().toISOString().split("T")[0];
 dateEl.setAttribute("min", today);
 
-//convert msecs to days,hours....
+//convert msecs to days,hours.... gets remaining time and day/hour/minute returns day and remaining time
 const converter = (a, b) => [Math.floor(a / b), a % b];
 
 //count down completed
@@ -37,12 +38,12 @@ function completed() {
 function remainingTime() {
   const now = new Date().getTime();
   let distance = countdownValue - now < 0 ? 0 : countdownValue - now;
-  //check wheter countdown is finished or not
+  //check whether countdown is finished or not
   if (!distance) {
     completed();
     return;
   }
-  //shoow remaining time
+  //show remaining time
   timeElements.forEach(
     (el, i) => ([el.textContent, distance] = converter(distance, timeTable[i]))
   );
@@ -61,13 +62,20 @@ function updateDOM() {
   countdownActive = setInterval(remainingTime, 1000);
 }
 
+const counter = () =>
+  new Date(countdownDate).getTime() +
+  new Date().getTimezoneOffset() * timeTable[2];
+
 function updateCountdown(e) {
   e.preventDefault();
   countdownTitle = e.srcElement[0].value;
   countdownDate = e.srcElement[1].value;
-  countdownValue =
-    new Date(countdownDate).getTime() +
-    new Date().getTimezoneOffset() * timeTable[2];
+  savedCountdown = { title: countdownTitle, date: countdownDate };
+
+  //store savedCountdown, object to string JSON.stringify
+  localStorage.setItem("countdown", JSON.stringify(savedCountdown));
+  countdownValue = counter();
+
   updateDOM();
 }
 
@@ -82,7 +90,23 @@ function reset() {
   countdownTitle = "";
   countdownDate = "";
   countdownForm.reset();
+  localStorage.removeItem("countdown");
 }
+
+//restore previous countdown
+function restorePrevCountdown() {
+  if (localStorage.getItem("countdown")) {
+    inputContainer.hidden = true;
+    savedCountdown = JSON.parse(localStorage.getItem("countdown"));
+    console.log(savedCountdown);
+    ({ title: countdownTitle, date: countdownDate } = savedCountdown);
+    console.log(countdownTitle, countdownDate);
+    //set countdownValue to now
+    countdownValue = counter();
+    updateDOM();
+  }
+}
+restorePrevCountdown();
 
 //eventlisteners
 countdownForm.addEventListener("submit", updateCountdown);
