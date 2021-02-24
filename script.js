@@ -8,8 +8,8 @@ const countdownBtn = document.getElementById("countdown-button");
 const timeElements = document.querySelectorAll("span");
 
 const completeEl = document.getElementById("complete");
-const completeElInfo = document.querySelector(".complete-info");
-const completeBtn = document.querySelector(".complete-button");
+const completeElInfo = document.getElementById("complete-info");
+const completeBtn = document.getElementById("complete-button");
 
 const timeTable = [24 * 60 * 60 * 1000, 60 * 60 * 1000, 60 * 1000, 1000];
 let countdownTitle = "",
@@ -98,9 +98,9 @@ function restorePrevCountdown() {
   if (localStorage.getItem("countdown")) {
     inputContainer.hidden = true;
     savedCountdown = JSON.parse(localStorage.getItem("countdown"));
-    console.log(savedCountdown);
+   
     ({ title: countdownTitle, date: countdownDate } = savedCountdown);
-    console.log(countdownTitle, countdownDate);
+  
     //set countdownValue to now
     countdownValue = counter();
     updateDOM();

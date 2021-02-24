@@ -7,7 +7,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-y: hidden;
   display: flex;
   align-items: center;
   font-family: Nunito, sans-serif;
@@ -157,17 +157,15 @@ li span {
 
 /* Media Query: Large Smartphone (Vertical) */
 @media screen and (max-width: 600px) {
-  .video-background {
-    height: 100vh;
-    width: 100vw;
-  }
-
   video {
     object-fit: cover;
     object-position: 70%;
     margin-top: -1px;
   }
-
+  .video-background {
+    height: 100vh;
+    width: 100vw;
+  }
   .container {
     min-width: unset;
     width: 95vw;
