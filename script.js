@@ -19,8 +19,10 @@ let countdownTitle = "",
   savedCountdown;
 
 //set date min with today
-const today = new Date().toISOString().split("T")[0];
-dateEl.setAttribute("min", today);
+dateEl.setAttribute(
+  "min",
+  countdownValue.toLocaleDateString().split(".").reverse().join("-")
+);
 
 //convert msecs to days,hours.... gets remaining time and day/hour/minute returns day and remaining time
 const converter = (a, b) => [Math.floor(a / b), a % b];
@@ -98,9 +100,9 @@ function restorePrevCountdown() {
   if (localStorage.getItem("countdown")) {
     inputContainer.hidden = true;
     savedCountdown = JSON.parse(localStorage.getItem("countdown"));
-   
+
     ({ title: countdownTitle, date: countdownDate } = savedCountdown);
-  
+
     //set countdownValue to now
     countdownValue = counter();
     updateDOM();
