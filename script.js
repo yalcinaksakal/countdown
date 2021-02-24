@@ -24,7 +24,7 @@ dateEl.setAttribute(
   countdownValue.toLocaleDateString().split(".").reverse().join("-")
 );
 
-//convert msecs to days,hours.... gets remaining time and day/hour/minute returns day and remaining time
+//convert msecs to days,hours.... gets remaining time and day/hour/minute returns number of day/hour/minute and remaining secs
 const converter = (a, b) => [Math.floor(a / b), a % b];
 
 //count down completed
@@ -64,6 +64,7 @@ function updateDOM() {
   countdownActive = setInterval(remainingTime, 1000);
 }
 
+//counter is equal to number of secs since epoch according to local TMZ
 const counter = () =>
   new Date(countdownDate).getTime() +
   new Date().getTimezoneOffset() * timeTable[2];
